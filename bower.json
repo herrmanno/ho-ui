@@ -1,12 +1,12 @@
 {
-  "name": "ho-components",
+  "name": "ho-ui",
   "version": "0.0.0",
   "homepage": "https://github.com/herrmanno/components",
   "authors": [
     "oliverherrmann <o.herrmann92@googlemail.com>"
   ],
   "description": "Tiny Html-Component Framework",
-  "main": "main.js",
+  "main": "",
   "keywords": [
     "HTML",
     "Component"
