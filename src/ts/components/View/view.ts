@@ -18,15 +18,15 @@ class View extends ho.components.Component {
 		return this.properties['viewname'];
 	}
 
-		protected state_changed(data: ho.flux.IRouterData): void {
-	    let html: string;
-		let state = data.state.view.filter((v) => {
-      		return v.name === this.viewname;
-	    })[0];
-		if(state && state.html)
-			html = state.html;
-		else
-			return;
+	protected state_changed(data: ho.flux.IRouterData): void {
+	    let html: string = null;
+		try {
+			html = data.state.view.filter((v) => {
+	      		return v.name === this.viewname;
+		    })[0].html;
+		} catch(e) {
+			html = null;
+		}
 
 	    this.getHtml(html)
   		.then(function(h) {
