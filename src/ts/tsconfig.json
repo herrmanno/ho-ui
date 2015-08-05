@@ -21,6 +21,8 @@
         "!./node_modules/**/*"
     ],
     "files": [
-        "./components/view.ts"
+        "./attributes/bind/bind.ts",
+        "./attributes/bindbi/bindbi.ts",
+        "./components/View/view.ts"
     ]
 }

@@ -1,7 +1,6 @@
-/// <reference path="../../../bower_components/ho-promise/dist/d.ts/promise.d.ts"/>
-/// <reference path="../../../bower_components/ho-components/dist/d.ts/components.d.ts"/>
-/// <reference path="../../../bower_components/ho-flux/dist/d.ts/flux.d.ts"/>
-/// <reference path="../../../bower_components/ho-flux/dist/d.ts/store.d.ts"/>
+/// <reference path="../../../../bower_components/ho-promise/dist/promise.d.ts"/>
+/// <reference path="../../../../bower_components/ho-components/dist/components.d.ts"/>
+/// <reference path="../../../../bower_components/ho-flux/dist/flux.d.ts"/>
 
 module ho.ui.components {
 
@@ -26,16 +25,21 @@ module ho.ui.components {
 		}
 
   		protected state_changed(data: ho.flux.IRouterData): void {
-		    let html = data.state.view.filter((v) => {
+		    let html: string;
+			let state = data.state.view.filter((v) => {
 	      		return v.name === this.viewname;
-		    })[0].html;
+		    })[0];
+			if(state && state.html)
+				html = state.html;
+			else
+				return;
 
 		    this.getHtml(html)
-	      		.then(function(h) {
+      		.then(function(h) {
 		      	html = h;
 		      	return this.loadDynamicRequirements(html);
 		    }.bind(this))
-		      	.then(function() {
+	      	.then(function() {
 		      	this.html = false;
 		      	this.element.innerHTML = html;
 		      	this.render();
@@ -67,7 +71,11 @@ module ho.ui.components {
     		});
 		}
 
-		protected loadDynamicRequirements(html: string): Promise<string, string> {
+		protected loadDynamicRequirements(html: string): Promise<any, any> {
+			return Promise.all([this.loadDynamicComponents(html), this.loadDynamicAttributes(html)]);
+		}
+
+		protected loadDynamicComponents(html: string): Promise<string, string> {
 		    let requirements = html.match(/<!--\s*requires?="(.+)"/);
 		    if (requirements !== null)
 		      	requirements = requirements[1].split(",").map((r) => { return r.trim() });
@@ -82,6 +90,26 @@ module ho.ui.components {
 		    })
 		    .map((req) => {
 		    	return Registry.loadComponent(req);
+		    });
+
+		    return Promise.all(promises);
+		}
+
+		protected loadDynamicAttributes(html: string): Promise<string, string> {
+		    let attributes = html.match(/<!--\s*attributes?="(.+)"/);
+		    if (attributes !== null)
+		      	attributes = attributes[1].split(",").map((a) => { return a.trim() });
+		    else
+		      	attributes = [];
+
+		    let Registry = ho.components.registry.instance;
+
+		    let promises = attributes
+	      	.filter((attr) => {
+		      	return !Registry.hasAttribute(attr);
+		    })
+		    .map((attr) => {
+		    	return Registry.loadAttribute(attr);
 		    });
 
 		    return Promise.all(promises);
