@@ -28,6 +28,7 @@ gulp.task('package', ['clean'], function() {
 	return gulp.src(src.ts)
 		.pipe(sourcemap.init())
 		.pipe(typescript({
+			target: 'es5',
 			sourceMap: true
 		}))
 		.pipe(sourcemap.write())
