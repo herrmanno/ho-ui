@@ -19,21 +19,17 @@ declare class Stored extends ho.components.Component {
     stores: Array<string>;
     init(): ho.promise.Promise<any, any>;
 }
-declare module ho.ui.components {
-    import Component = ho.components.Component;
-    import Promise = ho.promise.Promise;
-    class View extends Component {
-        html: string;
-        properties: {
-            name: string;
-            required: boolean;
-        }[];
-        init(): void;
-        viewname: any;
-        protected state_changed(data: ho.flux.IRouterData): void;
-        protected getHtml(html: string): Promise<string, string>;
-        protected loadDynamicRequirements(html: string): Promise<any, any>;
-        protected loadDynamicComponents(html: string): Promise<string, string>;
-        protected loadDynamicAttributes(html: string): Promise<string, string>;
-    }
+declare class View extends ho.components.Component {
+    html: string;
+    properties: {
+        name: string;
+        required: boolean;
+    }[];
+    init(): void;
+    viewname: any;
+    protected state_changed(data: ho.flux.IRouterData): void;
+    protected getHtml(html: string): ho.promise.Promise<string, string>;
+    protected loadDynamicRequirements(html: string): ho.promise.Promise<any, any>;
+    protected loadDynamicComponents(html: string): ho.promise.Promise<string, string>;
+    protected loadDynamicAttributes(html: string): ho.promise.Promise<string, string>;
 }
