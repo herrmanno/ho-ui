@@ -2,117 +2,110 @@
 /// <reference path="../../../../bower_components/ho-components/dist/components.d.ts"/>
 /// <reference path="../../../../bower_components/ho-flux/dist/flux.d.ts"/>
 
-module ho.ui.components {
+class View extends ho.components.Component {
 
-	import Component = ho.components.Component
-	import Flux = ho.flux;
-	import Promise = ho.promise.Promise;
+	html = "";
 
-	export class View extends Component {
+	properties = [
+		{ name: 'viewname', required: true }
+	];
 
-		html = "";
+	init() {
+		ho.flux.STORES.get(ho.flux.Router).register(this.state_changed, this);
+	}
 
-		properties = [
-			{ name: 'viewname', required: true }
-		];
+	get viewname() {
+		return this.properties['viewname'];
+	}
 
-		init() {
-			Flux.STORES.get(Flux.Router).register(this.state_changed, this);
-		}
+		protected state_changed(data: ho.flux.IRouterData): void {
+	    let html: string;
+		let state = data.state.view.filter((v) => {
+      		return v.name === this.viewname;
+	    })[0];
+		if(state && state.html)
+			html = state.html;
+		else
+			return;
 
-		get viewname() {
-			return this.properties['viewname'];
-		}
+	    this.getHtml(html)
+  		.then(function(h) {
+	      	html = h;
+	      	return this.loadDynamicRequirements(html);
+	    }.bind(this))
+      	.then(function() {
+	      	this.html = false;
+	      	this.element.innerHTML = html;
+	      	this.render();
+	    }.bind(this));
+	}
 
-  		protected state_changed(data: ho.flux.IRouterData): void {
-		    let html: string;
-			let state = data.state.view.filter((v) => {
-	      		return v.name === this.viewname;
-		    })[0];
-			if(state && state.html)
-				html = state.html;
-			else
-				return;
+		protected getHtml(html: string): ho.promise.Promise<string, string> {
+		if (typeof html === 'undefined')
+	      	return ho.promise.Promise.create(null);
+	    else if (html.slice(-5) !== '.html')
+	      	return ho.promise.Promise.create(html);
+	    else return new ho.promise.Promise((resolve, reject) => {
 
-		    this.getHtml(html)
-      		.then(function(h) {
-		      	html = h;
-		      	return this.loadDynamicRequirements(html);
-		    }.bind(this))
-	      	.then(function() {
-		      	this.html = false;
-		      	this.element.innerHTML = html;
-		      	this.render();
-		    }.bind(this));
-		}
+	      	let xmlhttp = new XMLHttpRequest();
+	      	xmlhttp.onreadystatechange = function() {
+	        	if (xmlhttp.readyState == 4) {
+		          	var resp = xmlhttp.responseText;
+		          	if (xmlhttp.status == 200) {
+		            	resolve(resp);
+		          	} else {
+		            	reject(resp);
+		          	}
+	        	}
+	      	};
 
-  		protected getHtml(html: string): Promise<string, string> {
-			if (typeof html === 'undefined')
-		      	return ho.promise.Promise.create(null);
-		    else if (html.slice(-5) !== '.html')
-		      	return ho.promise.Promise.create(html);
-		    else return new ho.promise.Promise((resolve, reject) => {
+	      	xmlhttp.open('GET', html, true);
+	      	xmlhttp.send();
 
-		      	let xmlhttp = new XMLHttpRequest();
-		      	xmlhttp.onreadystatechange = function() {
-		        	if (xmlhttp.readyState == 4) {
-			          	var resp = xmlhttp.responseText;
-			          	if (xmlhttp.status == 200) {
-			            	resolve(resp);
-			          	} else {
-			            	reject(resp);
-			          	}
-		        	}
-		      	};
+		});
+	}
 
-		      	xmlhttp.open('GET', html, true);
-		      	xmlhttp.send();
+	protected loadDynamicRequirements(html: string): ho.promise.Promise<any, any> {
+		return ho.promise.Promise.all([this.loadDynamicComponents(html), this.loadDynamicAttributes(html)]);
+	}
 
-    		});
-		}
+	protected loadDynamicComponents(html: string): ho.promise.Promise<string, string> {
+	    let requirements = html.match(/<!--\s*requires?="(.+)"/);
+	    if (requirements !== null)
+	      	requirements = requirements[1].split(",").map((r) => { return r.trim() });
+	    else
+	      	requirements = [];
 
-		protected loadDynamicRequirements(html: string): Promise<any, any> {
-			return Promise.all([this.loadDynamicComponents(html), this.loadDynamicAttributes(html)]);
-		}
+	    let Registry = ho.components.registry.instance;
 
-		protected loadDynamicComponents(html: string): Promise<string, string> {
-		    let requirements = html.match(/<!--\s*requires?="(.+)"/);
-		    if (requirements !== null)
-		      	requirements = requirements[1].split(",").map((r) => { return r.trim() });
-		    else
-		      	requirements = [];
+	    let promises = requirements
+      	.filter((req) => {
+	      	return !Registry.hasComponent(req);
+	    })
+	    .map((req) => {
+	    	return Registry.loadComponent(req);
+	    });
 
-		    let Registry = ho.components.registry.instance;
+	    return ho.promise.Promise.all(promises);
+	}
 
-		    let promises = requirements
-	      	.filter((req) => {
-		      	return !Registry.hasComponent(req);
-		    })
-		    .map((req) => {
-		    	return Registry.loadComponent(req);
-		    });
+	protected loadDynamicAttributes(html: string): ho.promise.Promise<string, string> {
+	    let attributes = html.match(/<!--\s*attributes?="(.+)"/);
+	    if (attributes !== null)
+	      	attributes = attributes[1].split(",").map((a) => { return a.trim() });
+	    else
+	      	attributes = [];
 
-		    return Promise.all(promises);
-		}
+	    let Registry = ho.components.registry.instance;
 
-		protected loadDynamicAttributes(html: string): Promise<string, string> {
-		    let attributes = html.match(/<!--\s*attributes?="(.+)"/);
-		    if (attributes !== null)
-		      	attributes = attributes[1].split(",").map((a) => { return a.trim() });
-		    else
-		      	attributes = [];
+	    let promises = attributes
+      	.filter((attr) => {
+	      	return !Registry.hasAttribute(attr);
+	    })
+	    .map((attr) => {
+	    	return Registry.loadAttribute(attr);
+	    });
 
-		    let Registry = ho.components.registry.instance;
-
-		    let promises = attributes
-	      	.filter((attr) => {
-		      	return !Registry.hasAttribute(attr);
-		    })
-		    .map((attr) => {
-		    	return Registry.loadAttribute(attr);
-		    });
-
-		    return Promise.all(promises);
-		}
+	    return ho.promise.Promise.all(promises);
 	}
 }
