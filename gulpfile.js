@@ -55,7 +55,7 @@ gulp.task('def', ['mini'], function() {
 	return ts.dts.pipe(gulp.dest(dist));
 });
 
-gulp.task('def-combine', function() {
+gulp.task('def-combine', ['def'], function() {
 	var src = [
 		"bower_components/ho-promise/dist/promise.d.ts",
 		"bower_components/ho-watch/dist/watch.d.ts",
@@ -96,4 +96,4 @@ gulp.task('combine-min', ['combine'], function() {
 });
 
 
-gulp.task('default', ['def', 'combine'], null);
+gulp.task('default', ['combine-min'], null);
