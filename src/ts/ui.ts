@@ -29,6 +29,7 @@ module ho.ui {
 		router: string | typeof ho.flux.Router; //alternative router class
 		map: string | boolean; // if set, map all ho.ui components in the componentprovider to the given url
 		dir: boolean; // set usedir in ho.components
+		min: boolean;
 		process: ()=>ho.promise.Promise<any, any>;
 	}
 
@@ -38,6 +39,7 @@ module ho.ui {
 		map: string | boolean = true;
 		mapDefault = "bower_components/ho-ui/dist/";
 		dir = true;
+		min = false;
 
 		constructor(opt: IOptions = <IOptions>{}) {
 			for(var key in opt) {
@@ -47,6 +49,7 @@ module ho.ui {
 
 		process(): ho.promise.Promise<any, any>{
 			return ho.promise.Promise.create(this.processDir())
+			.then(this.processMin.bind(this))
 			.then(this.processMap.bind(this))
 			.then(this.processRouter.bind(this))
 			.then(this.processRoot.bind(this))
@@ -106,6 +109,12 @@ module ho.ui {
 
 		protected processDir(): void {
 			ho.components.dir = this.dir;
+		}
+
+		protected processMin(): void {
+			ho.components.componentprovider.instance.useMin = this.min;
+			ho.components.attributeprovider.instance.useMin = this.min;
+			ho.flux.storeprovider.instance.useMin = this.min;
 		}
 	}
 

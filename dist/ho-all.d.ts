@@ -339,6 +339,7 @@ declare module ho.ui {
         router: string | typeof ho.flux.Router;
         map: string | boolean;
         dir: boolean;
+        min: boolean;
         process: () => ho.promise.Promise<any, any>;
     }
 }

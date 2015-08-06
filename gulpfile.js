@@ -78,7 +78,9 @@ gulp.task('combine', ['def-combine'], function() {
 		"dist/ui.js"
 	];
 	return gulp.src(src)
+	.pipe(sourcemap.init({loadMaps:true}))
 	.pipe(concat('ho-all.js'))
+	.pipe(sourcemap.write())
 	.pipe(gulp.dest(dist));
 });
 
