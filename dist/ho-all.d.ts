@@ -57,6 +57,9 @@ declare module ho.components {
 }
 declare module ho.components.attributeprovider {
     import Promise = ho.promise.Promise;
+    let mapping: {
+        [name: string]: string;
+    };
     class AttributeProvider {
         useMin: boolean;
         resolve(name: string): string;
@@ -223,69 +226,12 @@ declare module ho.flux {
         private stopDispatching();
     }
 }
-declare module ho.flux.storeprovider {
-    import Promise = ho.promise.Promise;
-    interface IStoreProvider {
-        useMin: boolean;
-        resolve(name: string): string;
-        getStore(name: string): Promise<typeof Store, string>;
-    }
-    let mapping: {
-        [name: string]: string;
-    };
-    let instance: IStoreProvider;
-}
 declare module ho.flux {
     import Promise = ho.promise.Promise;
-    class Storeregistry {
-        private stores;
-        register(store: Store<any>): Store<any>;
-        get<T extends Store<any>>(storeClass: {
-            new (): T;
-        }): T;
-        loadStore(name: string): Promise<Store<any>, string>;
-        protected getParentOfStore(name: string): Promise<string, any>;
-    }
-}
-declare module ho.flux {
-    class Store<T> extends CallbackHolder {
-        protected data: T;
-        private id;
-        private handlers;
-        constructor();
-        init(): any;
-        name: string;
-        register(callback: (data: T) => void, self?: any): string;
-        protected on(type: string, func: Function): void;
-        protected handle(action: IAction): void;
-        protected changed(): void;
-    }
-}
-declare module ho.flux {
-    import Promise = ho.promise.Promise;
-    interface IState {
-        name: string;
-        url: string;
-        redirect?: string;
-        before?: (data: IRouteData) => Promise<any, any>;
-        view?: Array<IViewState>;
-    }
-    interface IViewState {
-        name: string;
-        html: string;
-    }
-    interface IStates {
-        states: Array<IState>;
-    }
-}
-declare module ho.flux.stateprovider {
-    import Promise = ho.promise.Promise;
-    interface IStateProvider {
-        useMin: boolean;
-        resolve(): string;
-        getStates(name?: string): Promise<IStates, string>;
-    }
-    let instance: IStateProvider;
+    let DISPATCHER: Dispatcher;
+    let STORES: Storeregistry;
+    let dir: boolean;
+    function run(): Promise<any, any>;
 }
 declare module ho.flux {
     import Promise = ho.promise.Promise;
@@ -320,13 +266,71 @@ declare module ho.flux {
 }
 declare module ho.flux {
     import Promise = ho.promise.Promise;
-    let DISPATCHER: Dispatcher;
-    let STORES: Storeregistry;
-    function run(): Promise<any, any>;
+    interface IState {
+        name: string;
+        url: string;
+        redirect?: string;
+        before?: (data: IRouteData) => Promise<any, any>;
+        view?: Array<IViewState>;
+    }
+    interface IViewState {
+        name: string;
+        html: string;
+    }
+    interface IStates {
+        states: Array<IState>;
+    }
+}
+declare module ho.flux.stateprovider {
+    import Promise = ho.promise.Promise;
+    interface IStateProvider {
+        useMin: boolean;
+        resolve(): string;
+        getStates(name?: string): Promise<IStates, string>;
+    }
+    let instance: IStateProvider;
+}
+declare module ho.flux {
+    class Store<T> extends CallbackHolder {
+        protected data: T;
+        private id;
+        private handlers;
+        constructor();
+        init(): any;
+        name: string;
+        register(callback: (data: T) => void, self?: any): string;
+        protected on(type: string, func: Function): void;
+        protected handle(action: IAction): void;
+        protected changed(): void;
+    }
+}
+declare module ho.flux.storeprovider {
+    import Promise = ho.promise.Promise;
+    interface IStoreProvider {
+        useMin: boolean;
+        resolve(name: string): string;
+        getStore(name: string): Promise<typeof Store, string>;
+    }
+    let mapping: {
+        [name: string]: string;
+    };
+    let instance: IStoreProvider;
+}
+declare module ho.flux {
+    import Promise = ho.promise.Promise;
+    class Storeregistry {
+        private stores;
+        register(store: Store<any>): Store<any>;
+        get<T extends Store<any>>(storeClass: {
+            new (): T;
+        }): T;
+        loadStore(name: string): Promise<Store<any>, string>;
+        protected getParentOfStore(name: string): Promise<string, any>;
+    }
 }
 
-/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
 /// <reference path="bower_components/ho-components/dist/components.d.ts" />
+/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
 /// <reference path="bower_components/ho-flux/dist/flux.d.ts" />
 declare module ho.ui {
     function run(options?: IOptions): ho.promise.Promise<any, any>;
@@ -337,6 +341,20 @@ declare module ho.ui {
         dir: boolean;
         process: () => ho.promise.Promise<any, any>;
     }
+}
+declare class Bind extends ho.components.WatchAttribute {
+    init(): void;
+    protected bindInput(): void;
+    protected bindSelect(): void;
+    protected bindTextarea(): void;
+    protected bindOther(): void;
+}
+declare class BindBi extends Bind {
+    protected bindInput(): void;
+    protected bindSelect(): void;
+    protected bindTextarea(): void;
+    protected bindOther(): void;
+    update(): void;
 }
 declare class Stored extends ho.components.Component {
     stores: Array<string>;
@@ -355,18 +373,4 @@ declare class View extends ho.components.Component {
     protected loadDynamicRequirements(html: string): ho.promise.Promise<any, any>;
     protected loadDynamicComponents(html: string): ho.promise.Promise<string, string>;
     protected loadDynamicAttributes(html: string): ho.promise.Promise<string, string>;
-}
-declare class Bind extends ho.components.WatchAttribute {
-    init(): void;
-    protected bindInput(): void;
-    protected bindSelect(): void;
-    protected bindTextarea(): void;
-    protected bindOther(): void;
-}
-declare class BindBi extends Bind {
-    protected bindInput(): void;
-    protected bindSelect(): void;
-    protected bindTextarea(): void;
-    protected bindOther(): void;
-    update(): void;
 }
