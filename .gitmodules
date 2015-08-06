@@ -1,6 +1,6 @@
 [submodule "dependencies/components"]
 	path = dependencies/components
-	url = ../Components
+	url = giet://github.com/herrmanno/components.get
 [submodule "dependencies/flux"]
 	path = dependencies/flux
 	url = ../Flux
