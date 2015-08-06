@@ -1,12 +1,12 @@
 [submodule "dependencies/components"]
 	path = dependencies/components
-	url = git://github.com/herrmanno/components.get
+	url = git://github.com/herrmanno/components.git
 [submodule "dependencies/flux"]
 	path = dependencies/flux
-	url = ../Flux
+	url = git://github.com/herrmanno/flux.git
 [submodule "dependencies/watch"]
 	path = dependencies/watch
-	url = ../Watch
+	url = git://github.com/herrmanno/watch.git
 [submodule "dependencies/promise"]
 	path = dependencies/promise
-	url = ../promise
+	url = git://github.com/herrmanno/promise.git
