@@ -59,9 +59,6 @@ module ho.ui {
 			return new ho.promise.Promise((resolve, reject) => {
 				if(typeof this.root === 'string') {
 					ho.components.registry.instance.loadComponent(<string>this.root)
-					.then(c => {
-						ho.components.registry.instance.register(c);
-					})
 					.then(resolve)
 					.catch(reject);
 

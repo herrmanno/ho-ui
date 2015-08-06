@@ -329,8 +329,8 @@ declare module ho.flux {
     }
 }
 
-/// <reference path="bower_components/ho-components/dist/components.d.ts" />
 /// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
+/// <reference path="bower_components/ho-components/dist/components.d.ts" />
 /// <reference path="bower_components/ho-flux/dist/flux.d.ts" />
 declare module ho.ui {
     function run(options?: IOptions): ho.promise.Promise<any, any>;
@@ -342,20 +342,6 @@ declare module ho.ui {
         min: boolean;
         process: () => ho.promise.Promise<any, any>;
     }
-}
-declare class Bind extends ho.components.WatchAttribute {
-    init(): void;
-    protected bindInput(): void;
-    protected bindSelect(): void;
-    protected bindTextarea(): void;
-    protected bindOther(): void;
-}
-declare class BindBi extends Bind {
-    protected bindInput(): void;
-    protected bindSelect(): void;
-    protected bindTextarea(): void;
-    protected bindOther(): void;
-    update(): void;
 }
 declare class Stored extends ho.components.Component {
     stores: Array<string>;
@@ -374,4 +360,18 @@ declare class View extends ho.components.Component {
     protected loadDynamicRequirements(html: string): ho.promise.Promise<any, any>;
     protected loadDynamicComponents(html: string): ho.promise.Promise<string, string>;
     protected loadDynamicAttributes(html: string): ho.promise.Promise<string, string>;
+}
+declare class Bind extends ho.components.WatchAttribute {
+    init(): void;
+    protected bindInput(): void;
+    protected bindSelect(): void;
+    protected bindTextarea(): void;
+    protected bindOther(): void;
+}
+declare class BindBi extends Bind {
+    protected bindInput(): void;
+    protected bindSelect(): void;
+    protected bindTextarea(): void;
+    protected bindOther(): void;
+    update(): void;
 }
