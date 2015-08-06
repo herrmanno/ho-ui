@@ -96,4 +96,4 @@ gulp.task('combine-min', ['combine'], function() {
 });
 
 
-gulp.task('default', ['def'], null);
+gulp.task('default', ['def', 'combine'], null);
