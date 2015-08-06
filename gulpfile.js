@@ -99,11 +99,16 @@ gulp.task('combine-min', ['combine'], function() {
 	.pipe(gulp.dest(dist));
 });
 
+gulp.task('sub:commit', shell.task([
+  'git submodule foreach \'git commit -a -m "submodule changed" 2> nul\'',
+]));
+
 gulp.task('update:remote', shell.task([
   'git submodule foreach git pull',
 ]));
 
 gulp.task('update:local', shell.task([
+  'git submodule foreach git reset --hard local/master',
   'git submodule foreach git pull local master',
 ]));
 
