@@ -1,0 +1,12 @@
+[submodule "dependencies/components"]
+	path = dependencies/components
+	url = ../Components
+[submodule "dependencies/flux"]
+	path = dependencies/flux
+	url = ../Flux
+[submodule "dependencies/watch"]
+	path = dependencies/watch
+	url = ../Watch
+[submodule "dependencies/promise"]
+	path = dependencies/promise
+	url = ../promise

@@ -5,16 +5,39 @@ var rename = require('gulp-rename');
 var typescript = require('gulp-typescript');
 var sourcemap = require('gulp-sourcemaps');
 var concat = require('gulp-concat');
+var shell = require('gulp-shell');
 
-
+var name = 'ho-ui';
+var dist = 'dist';
 var src = {
 	ts: ['src/ts/**/*.ts'],
 	js: ['src/js/**/*.js']
 };
+var modules = {
+	declarations: [
+		"dependencies/promise/dist/promise.d.ts",
+		"dependencies/watch/dist/watch.d.ts",
+		"dependencies/components/dist/components.d.ts",
+		"dependencies/flux/dist/flux.d.ts",
+		"dist/ui.d.ts"
+	],
+	js: [
+		"dependencies/promise/dist/promise.js",
+		"dependencies/watch/dist/watch.js",
+		"dependencies/components/dist/components.js",
+		"dependencies/flux/dist/flux.js",
+		"dist/ui.js"
+	],
+	min: [
+		"dependencies/promise/dist/promise.min.js",
+		"dependencies/watch/dist/watch.min.js",
+		"dependencies/components/dist/components.min.js",
+		"dependencies/flux/dist/flux.min.js",
+		"dist/ui.js"
+	]
+};
 
-var name = 'ho-ui';
 
-var dist = 'dist';
 
 
 gulp.task('clean', function() {
@@ -56,28 +79,14 @@ gulp.task('def', ['mini'], function() {
 });
 
 gulp.task('def-combine', ['def'], function() {
-	var src = [
-		"bower_components/ho-promise/dist/promise.d.ts",
-		"bower_components/ho-watch/dist/watch.d.ts",
-		"bower_components/ho-components/dist/components.d.ts",
-		"bower_components/ho-flux/dist/flux.d.ts",
-		"dist/ui.d.ts"
-	];
-	return gulp.src(src)
+	return gulp.src(modules.declarations)
 	.pipe(concat('ho-all.d.ts'))
 	.pipe(gulp.dest(dist));
 });
 
 
 gulp.task('combine', ['def-combine'], function() {
-	var src = [
-		"bower_components/ho-promise/dist/promise.js",
-		"bower_components/ho-watch/dist/watch.js",
-		"bower_components/ho-components/dist/components.js",
-		"bower_components/ho-flux/dist/flux.js",
-		"dist/ui.js"
-	];
-	return gulp.src(src)
+	return gulp.src(modules.js)
 	.pipe(sourcemap.init({loadMaps:true}))
 	.pipe(concat('ho-all.js'))
 	.pipe(sourcemap.write())
@@ -85,17 +94,18 @@ gulp.task('combine', ['def-combine'], function() {
 });
 
 gulp.task('combine-min', ['combine'], function() {
-	var src = [
-		"bower_components/ho-promise/dist/promise.min.js",
-		"bower_components/ho-watch/dist/watch.min.js",
-		"bower_components/ho-components/dist/components.min.js",
-		"bower_components/ho-flux/dist/flux.min.js",
-		"dist/ui.min.js"
-	];
-	return gulp.src(src)
+	return gulp.src(modules.min)
 	.pipe(concat('ho-all.min.js'))
 	.pipe(gulp.dest(dist));
 });
+
+gulp.task('update:remote', shell.task([
+  'git submodule foreach git pull',
+]));
+
+gulp.task('update:local', shell.task([
+  'git submodule foreach git pull local master',
+]));
 
 
 gulp.task('default', ['combine-min'], null);
