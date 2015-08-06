@@ -1,6 +1,9 @@
 /// <reference path="bower_components/ho-components/dist/components.d.ts" />
 /// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
 /// <reference path="bower_components/ho-flux/dist/flux.d.ts" />
+declare module ho.ui {
+    function run(options?: {}): void;
+}
 declare class Bind extends ho.components.WatchAttribute {
     init(): void;
     protected bindInput(): void;
@@ -8,16 +11,16 @@ declare class Bind extends ho.components.WatchAttribute {
     protected bindTextarea(): void;
     protected bindOther(): void;
 }
+declare class Stored extends ho.components.Component {
+    stores: Array<string>;
+    init(): ho.promise.Promise<any, any>;
+}
 declare class BindBi extends Bind {
     protected bindInput(): void;
     protected bindSelect(): void;
     protected bindTextarea(): void;
     protected bindOther(): void;
     update(): void;
-}
-declare class Stored extends ho.components.Component {
-    stores: Array<string>;
-    init(): ho.promise.Promise<any, any>;
 }
 declare class View extends ho.components.Component {
     html: string;

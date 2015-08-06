@@ -24,6 +24,7 @@
         "./attributes/bind/bind.ts",
         "./attributes/bindbi/bindbi.ts",
         "./components/Stored/Stored.ts",
-        "./components/View/view.ts"
+        "./components/View/view.ts",
+        "./ui.ts"
     ]
 }

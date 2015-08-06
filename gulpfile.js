@@ -4,6 +4,7 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var typescript = require('gulp-typescript');
 var sourcemap = require('gulp-sourcemaps');
+var concat = require('gulp-concat');
 
 
 var src = {
@@ -52,6 +53,46 @@ gulp.task('def', ['mini'], function() {
 			declarationFiles: true
 		}));
 	return ts.dts.pipe(gulp.dest(dist));
+});
+
+gulp.task('def-combine', function() {
+	var src = [
+		"bower_components/ho-promise/dist/promise.d.ts",
+		"bower_components/ho-watch/dist/watch.d.ts",
+		"bower_components/ho-components/dist/components.d.ts",
+		"bower_components/ho-flux/dist/flux.d.ts",
+		"dist/ui.d.ts"
+	];
+	return gulp.src(src)
+	.pipe(concat('ho-all.d.ts'))
+	.pipe(gulp.dest(dist));
+});
+
+
+gulp.task('combine', ['def-combine'], function() {
+	var src = [
+		"bower_components/ho-promise/dist/promise.js",
+		"bower_components/ho-watch/dist/watch.js",
+		"bower_components/ho-components/dist/components.js",
+		"bower_components/ho-flux/dist/flux.js",
+		"dist/ui.js"
+	];
+	return gulp.src(src)
+	.pipe(concat('ho-all.js'))
+	.pipe(gulp.dest(dist));
+});
+
+gulp.task('combine-min', ['combine'], function() {
+	var src = [
+		"bower_components/ho-promise/dist/promise.min.js",
+		"bower_components/ho-watch/dist/watch.min.js",
+		"bower_components/ho-components/dist/components.min.js",
+		"bower_components/ho-flux/dist/flux.min.js",
+		"dist/ui.min.js"
+	];
+	return gulp.src(src)
+	.pipe(concat('ho-all.min.js'))
+	.pipe(gulp.dest(dist));
 });
 
 

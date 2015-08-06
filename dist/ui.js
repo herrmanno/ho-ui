@@ -1,0 +1,12 @@
+var ho;
+(function (ho) {
+    var ui;
+    (function (ui) {
+        function run(options) {
+            if (options === void 0) { options = {}; }
+        }
+        ui.run = run;
+    })(ui = ho.ui || (ho.ui = {}));
+})(ho || (ho = {}));
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInVpLnRzIl0sIm5hbWVzIjpbImhvIiwiaG8udWkiLCJoby51aS5ydW4iXSwibWFwcGluZ3MiOiJBQUFBLElBQU8sRUFBRSxDQUVSO0FBRkQsV0FBTyxFQUFFO0lBQUNBLElBQUFBLEVBQUVBLENBRVhBO0lBRlNBLFdBQUFBLEVBQUVBLEVBQUNBLENBQUNBO1FBQ2JDLGFBQW9CQSxPQUFVQTtZQUFWQyx1QkFBVUEsR0FBVkEsWUFBVUE7UUFBR0EsQ0FBQ0E7UUFBbEJELE1BQUdBLE1BQWVBLENBQUFBO0lBQ25DQSxDQUFDQSxFQUZTRCxFQUFFQSxHQUFGQSxLQUFFQSxLQUFGQSxLQUFFQSxRQUVYQTtBQUFEQSxDQUFDQSxFQUZNLEVBQUUsS0FBRixFQUFFLFFBRVIiLCJmaWxlIjoidWkuanMiLCJzb3VyY2VzQ29udGVudCI6WyJtb2R1bGUgaG8udWkge1xuXHRleHBvcnQgZnVuY3Rpb24gcnVuKG9wdGlvbnM9e30pIHt9XG59XG4iXSwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=
