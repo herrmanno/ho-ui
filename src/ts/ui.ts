@@ -1,6 +1,8 @@
 module ho.ui {
 
 	export function run(options:IOptions=new Options()): ho.promise.Promise<any, any> {
+		options = new Options(options);
+
 		let p = options.process()
 		.then(ho.components.run)
 		.then(ho.flux.run);
@@ -36,6 +38,12 @@ module ho.ui {
 		map: string | boolean = true;
 		mapDefault = "bower_components/ho-ui/dist/";
 		dir = true;
+
+		constructor(opt: IOptions = <IOptions>{}) {
+			for(var key in opt) {
+				this[key] = opt[key];
+			}
+		}
 
 		process(): ho.promise.Promise<any, any>{
 			return ho.promise.Promise.create(this.processDir())
