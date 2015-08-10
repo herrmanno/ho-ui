@@ -1,8 +1,7 @@
-# components
+# ho-ui
+
+ho-ui is the production package for ho-components/-ho-flux apps. It contains a single js file `ho-all.js` that contains all needed dependencies. Furthermore it adds some useful prebuilt components, attributes and stores.
 
 ### TODO
 
-* call an destructor on an components children before they get dismissed because `component#rendered` was called
-* add possibility to set default value and required flag for properties 
-* make components extendable
-* add possibility to simply change components / html path 
+* add another view implementation, that manages its html mapping self.
