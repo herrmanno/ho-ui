@@ -92,15 +92,15 @@ module ho.ui {
 			}
 
 			components.forEach(c => {
-				ho.components.componentprovider.mapping[c] = this.map + 'components/' + c + '/' + c + '.js';
+				ho.components.registry.mapping[c] = this.map + 'components/' + c + '/' + c + '.js';
 			});
 
 			attributes.forEach(a => {
-				ho.components.attributeprovider.mapping[a] = this.map + 'attributes/' + a + '/' + a + '.js';
+				ho.components.registry.mapping[a] = this.map + 'attributes/' + a + '/' + a + '.js';
 			});
 
 			stores.forEach(s => {
-				ho.flux.storeprovider.mapping[s] = this.map + 'stores/' + s + '/' + s + '.js';
+				ho.flux.registry.mapping[s] = this.map + 'stores/' + s + '/' + s + '.js';
 			});
 		}
 
@@ -109,9 +109,11 @@ module ho.ui {
 		}
 
 		protected processMin(): void {
+			/*
 			ho.components.componentprovider.instance.useMin = this.min;
 			ho.components.attributeprovider.instance.useMin = this.min;
 			ho.flux.storeprovider.instance.useMin = this.min;
+			*/
 		}
 	}
 

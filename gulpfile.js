@@ -10,8 +10,8 @@ var shell = require('gulp-shell');
 var name = 'ho-ui';
 var dist = 'dist';
 var src = {
-	ts: ['src/ts/**/*.ts'],
-	js: ['src/js/**/*.js']
+	ts: ['src/**/*.ts'],
+	js: ['src/**/*.js']
 };
 var modules = {
 	declarations: [
@@ -36,7 +36,7 @@ var modules = {
 		"bower_components/ho-watch/dist/watch.min.js",
 		"bower_components/ho-components/dist/components.min.js",
 		"bower_components/ho-flux/dist/flux.min.js",
-		"dist/ui.js"
+		"dist/ui.min.js"
 	]
 };
 
@@ -101,19 +101,6 @@ gulp.task('combine-min', ['combine'], function() {
 	.pipe(concat('ho-all.min.js'))
 	.pipe(gulp.dest(dist));
 });
-
-gulp.task('sub:commit', shell.task([
-  'git submodule foreach \'git commit -a -m "submodule changed" 2> nul\'',
-]));
-
-gulp.task('update:remote', shell.task([
-  'git submodule foreach git pull',
-]));
-
-gulp.task('update:local', shell.task([
-  'git submodule foreach git reset --hard local/master',
-  'git submodule foreach git pull local master',
-]));
 
 
 gulp.task('default', ['combine-min'], null);

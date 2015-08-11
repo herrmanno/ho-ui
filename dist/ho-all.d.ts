@@ -21,6 +21,85 @@ declare module ho.promise {
     }
 }
 
+/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
+declare module ho.classloader {
+    let mapping: {
+        [key: string]: string;
+    };
+    class ClassLoader {
+        private conf;
+        private cache;
+        constructor(c?: ILoaderConfig);
+        config(c: ILoaderConfig): void;
+        load(arg: ILoadArguments): promise.Promise<Function[], any>;
+        protected load_script(arg: ILoadArguments): PromiseOfClasses;
+        protected load_function(arg: ILoadArguments): PromiseOfClasses;
+        protected load_eval(arg: ILoadArguments): PromiseOfClasses;
+        protected getParentName(url: string): ho.promise.Promise<string, any>;
+        protected parseParentFromSource(src: string): string;
+        resolveUrl(name: string): string;
+        protected exists(name: string): boolean;
+    }
+}
+declare module ho.classloader {
+    interface ILoadArguments {
+        name?: string;
+        url?: string;
+        parent?: boolean;
+        expose?: boolean;
+        super?: Array<string>;
+    }
+    class LoadArguments implements ILoadArguments {
+        name: string;
+        url: string;
+        parent: boolean;
+        expose: boolean;
+        super: Array<string>;
+        constructor(arg: ILoadArguments, resolveUrl: (name: string) => string);
+    }
+}
+declare module ho.classloader {
+    interface ILoaderConfig {
+        loadType?: LoadType;
+        urlTemplate?: string;
+        useDir?: boolean;
+        useMin?: boolean;
+        cache?: boolean;
+    }
+    class LoaderConfig implements ILoaderConfig {
+        loadType: LoadType;
+        urlTemplate: string;
+        useDir: boolean;
+        useMin: boolean;
+        cache: boolean;
+        constructor(c?: ILoaderConfig);
+    }
+}
+declare module ho.classloader {
+    enum LoadType {
+        SCRIPT = 0,
+        FUNCTION = 1,
+        EVAL = 2,
+    }
+}
+declare module ho.classloader {
+    function config(c: ILoaderConfig): void;
+    function load(arg: ILoadArguments): PromiseOfClasses;
+}
+declare module ho.classloader {
+    type clazz = Function;
+    type PromiseOfClasses = ho.promise.Promise<clazz[], any>;
+}
+declare module ho.classloader.util {
+    function expose(name: string, obj: any): void;
+}
+declare module ho.classloader.util {
+    function get(path: string, obj?: any): any;
+}
+declare module ho.classloader.xhr {
+    function get(url: string): ho.promise.Promise<string, string>;
+}
+
 interface Window {
     webkitRequestAnimationFrame: (callback: FrameRequestCallback) => number;
     mozRequestAnimationFrame: (callback: FrameRequestCallback) => number;
@@ -31,8 +110,9 @@ declare module ho.watch {
     function watch(obj: any, name: string, handler: Handler): void;
 }
 
-/// <reference path="bower_components/ho-watch/dist/d.ts/watch.d.ts" />
 /// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
+/// <reference path="bower_components/ho-classloader/dist/classloader.d.ts" />
+/// <reference path="bower_components/ho-watch/dist/watch.d.ts" />
 declare module ho.components {
     /**
         Baseclass for Attributes.
@@ -54,96 +134,6 @@ declare module ho.components {
         protected watch(path: string): void;
         protected eval(path: string): any;
     }
-}
-declare module ho.components.attributeprovider {
-    import Promise = ho.promise.Promise;
-    let mapping: {
-        [name: string]: string;
-    };
-    class AttributeProvider {
-        useMin: boolean;
-        resolve(name: string): string;
-        getAttribute(name: string): Promise<typeof Attribute, string>;
-    }
-    let instance: AttributeProvider;
-}
-declare module ho.components.componentprovider {
-    import Promise = ho.promise.Promise;
-    let mapping: {
-        [name: string]: string;
-    };
-    class ComponentProvider {
-        useMin: boolean;
-        resolve(name: string): string;
-        getComponent(name: string): Promise<typeof Component, string>;
-        private get(name);
-    }
-    let instance: ComponentProvider;
-}
-declare module ho.components.registry {
-    import Promise = ho.promise.Promise;
-    class Registry {
-        private components;
-        private attributes;
-        register(ca: typeof Component | typeof Attribute): void;
-        run(): Promise<any, any>;
-        initComponent(component: typeof Component, element?: HTMLElement | Document): Promise<any, any>;
-        initElement(element: HTMLElement): Promise<any, any>;
-        hasComponent(name: string): boolean;
-        hasAttribute(name: string): boolean;
-        getAttribute(name: string): typeof Attribute;
-        loadComponent(name: string): Promise<typeof Component, string>;
-        loadAttribute(name: string): Promise<typeof Attribute, string>;
-        protected getParentOfComponent(name: string): Promise<string, any>;
-        protected getParentOfAttribute(name: string): Promise<string, any>;
-        protected getParentOfClass(path: string): Promise<string, any>;
-    }
-    let instance: Registry;
-}
-declare module ho.components {
-    function run(): ho.promise.Promise<any, any>;
-    function register(c: typeof Component | typeof Attribute): void;
-    let dir: boolean;
-}
-declare module ho.components.htmlprovider {
-    import Promise = ho.promise.Promise;
-    class HtmlProvider {
-        private cache;
-        resolve(name: string): string;
-        getHTML(name: string): Promise<string, string>;
-    }
-    let instance: HtmlProvider;
-}
-declare module ho.components.temp {
-    function set(d: any): number;
-    function get(i: number): any;
-    function call(i: number, ...args: any[]): void;
-}
-declare module ho.components.renderer {
-    class Renderer {
-        private r;
-        private voids;
-        private cache;
-        render(component: Component): void;
-        private parse(html, root?);
-        private renderRepeat(root, models);
-        private domToString(root, indent);
-        private repl(str, models);
-        private evaluate(models, path);
-        private evaluateValue(models, path);
-        private evaluateValueAndModel(models, path);
-        private evaluateExpression(models, path);
-        private evaluateFunction(models, path);
-        private copyNode(node);
-        private isVoid(name);
-    }
-    let instance: Renderer;
-}
-declare module ho.components.styler {
-    interface IStyler {
-        applyStyle(component: Component, css?: string): void;
-    }
-    let instance: IStyler;
 }
 declare module ho.components {
     import Promise = ho.promise.Promise;
@@ -197,7 +187,76 @@ declare module ho.components {
         static getName(clazz: Component): string;
     }
 }
+declare module ho.components {
+    function run(): ho.promise.Promise<any, any>;
+    function register(c: typeof Component | typeof Attribute): void;
+}
+declare module ho.components.htmlprovider {
+    import Promise = ho.promise.Promise;
+    class HtmlProvider {
+        private cache;
+        resolve(name: string): string;
+        getHTML(name: string): Promise<string, string>;
+    }
+    let instance: HtmlProvider;
+}
+declare module ho.components.registry {
+    import Promise = ho.promise.Promise;
+    let mapping: {
+        [key: string]: string;
+    };
+    let useDir: boolean;
+    class Registry {
+        private components;
+        private attributes;
+        private componentLoader;
+        private attributeLoader;
+        register(ca: typeof Component | typeof Attribute): void;
+        run(): Promise<any, any>;
+        initComponent(component: typeof Component, element?: HTMLElement | Document): Promise<any, any>;
+        initElement(element: HTMLElement): Promise<any, any>;
+        hasComponent(name: string): boolean;
+        hasAttribute(name: string): boolean;
+        getAttribute(name: string): typeof Attribute;
+        loadComponent(name: string): Promise<typeof Component, string>;
+        loadAttribute(name: string): Promise<typeof Attribute, string>;
+    }
+    let instance: Registry;
+}
+declare module ho.components.renderer {
+    class Renderer {
+        private r;
+        private voids;
+        private cache;
+        render(component: Component): void;
+        private parse(html, root?);
+        private renderRepeat(root, models);
+        private domToString(root, indent);
+        private repl(str, models);
+        private evaluate(models, path);
+        private evaluateValue(models, path);
+        private evaluateValueAndModel(models, path);
+        private evaluateExpression(models, path);
+        private evaluateFunction(models, path);
+        private copyNode(node);
+        private isVoid(name);
+    }
+    let instance: Renderer;
+}
+declare module ho.components.styler {
+    interface IStyler {
+        applyStyle(component: Component, css?: string): void;
+    }
+    let instance: IStyler;
+}
+declare module ho.components.temp {
+    function set(d: any): number;
+    function get(i: number): any;
+    function call(i: number, ...args: any[]): void;
+}
 
+/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
+/// <reference path="bower_components/ho-classloader/dist/classloader.d.ts" />
 declare module ho.flux {
     class CallbackHolder {
         protected prefix: string;
@@ -229,7 +288,7 @@ declare module ho.flux {
 declare module ho.flux {
     import Promise = ho.promise.Promise;
     let DISPATCHER: Dispatcher;
-    let STORES: Storeregistry;
+    let STORES: registry.Registry;
     let dir: boolean;
     function run(): Promise<any, any>;
 }
@@ -249,8 +308,8 @@ declare module ho.flux {
     }
     class Router extends Store<IRouterData> {
         private mapping;
-        constructor();
         init(): Promise<any, any>;
+        go(state: string, data?: any): void;
         go(data: IRouteData): void;
         private initStates();
         private getStateFromName(name);
@@ -281,15 +340,6 @@ declare module ho.flux {
         states: Array<IState>;
     }
 }
-declare module ho.flux.stateprovider {
-    import Promise = ho.promise.Promise;
-    interface IStateProvider {
-        useMin: boolean;
-        resolve(): string;
-        getStates(name?: string): Promise<IStates, string>;
-    }
-    let instance: IStateProvider;
-}
 declare module ho.flux {
     class Store<T> extends CallbackHolder {
         protected data: T;
@@ -304,34 +354,33 @@ declare module ho.flux {
         protected changed(): void;
     }
 }
-declare module ho.flux.storeprovider {
+declare module ho.flux.registry {
     import Promise = ho.promise.Promise;
-    interface IStoreProvider {
-        useMin: boolean;
-        resolve(name: string): string;
-        getStore(name: string): Promise<typeof Store, string>;
-    }
     let mapping: {
-        [name: string]: string;
+        [key: string]: string;
     };
-    let instance: IStoreProvider;
-}
-declare module ho.flux {
-    import Promise = ho.promise.Promise;
-    class Storeregistry {
+    let useDir: boolean;
+    class Registry {
         private stores;
+        private storeLoader;
         register(store: Store<any>): Store<any>;
+        get(storeClass: string): Store<any>;
         get<T extends Store<any>>(storeClass: {
             new (): T;
         }): T;
         loadStore(name: string): Promise<Store<any>, string>;
-        protected getParentOfStore(name: string): Promise<string, any>;
     }
 }
+declare module ho.flux.stateprovider {
+    import Promise = ho.promise.Promise;
+    interface IStateProvider {
+        useMin: boolean;
+        resolve(): string;
+        getStates(name?: string): Promise<IStates, string>;
+    }
+    let instance: IStateProvider;
+}
 
-/// <reference path="bower_components/ho-components/dist/components.d.ts" />
-/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
-/// <reference path="bower_components/ho-flux/dist/flux.d.ts" />
 declare module ho.ui {
     function run(options?: IOptions): ho.promise.Promise<any, any>;
     interface IOptions {
@@ -359,7 +408,7 @@ declare class BindBi extends Bind {
 }
 declare class Stored extends ho.components.Component {
     stores: Array<string>;
-    init(): ho.promise.Promise<any, any>;
+    init(): any;
 }
 declare class View extends ho.components.Component {
     html: string;

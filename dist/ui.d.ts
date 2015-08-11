@@ -1,6 +1,3 @@
-/// <reference path="bower_components/ho-components/dist/components.d.ts" />
-/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
-/// <reference path="bower_components/ho-flux/dist/flux.d.ts" />
 declare module ho.ui {
     function run(options?: IOptions): ho.promise.Promise<any, any>;
     interface IOptions {
@@ -28,7 +25,7 @@ declare class BindBi extends Bind {
 }
 declare class Stored extends ho.components.Component {
     stores: Array<string>;
-    init(): ho.promise.Promise<any, any>;
+    init(): any;
 }
 declare class View extends ho.components.Component {
     html: string;
