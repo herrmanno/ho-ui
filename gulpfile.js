@@ -15,24 +15,27 @@ var src = {
 };
 var modules = {
 	declarations: [
-		"dependencies/promise/dist/promise.d.ts",
-		"dependencies/watch/dist/watch.d.ts",
-		"dependencies/components/dist/components.d.ts",
-		"dependencies/flux/dist/flux.d.ts",
+		"bower_components/ho-promise/dist/promise.d.ts",
+		"bower_components/ho-classloader/dist/classloader.d.ts",
+		"bower_components/ho-watch/dist/watch.d.ts",
+		"bower_components/ho-components/dist/components.d.ts",
+		"bower_components/ho-flux/dist/flux.d.ts",
 		"dist/ui.d.ts"
 	],
 	js: [
-		"dependencies/promise/dist/promise.js",
-		"dependencies/watch/dist/watch.js",
-		"dependencies/components/dist/components.js",
-		"dependencies/flux/dist/flux.js",
+		"bower_components/ho-promise/dist/promise.js",
+		"bower_components/ho-classloader/dist/classloader.js",
+		"bower_components/ho-watch/dist/watch.js",
+		"bower_components/ho-components/dist/components.js",
+		"bower_components/ho-flux/dist/flux.js",
 		"dist/ui.js"
 	],
 	min: [
-		"dependencies/promise/dist/promise.min.js",
-		"dependencies/watch/dist/watch.min.js",
-		"dependencies/components/dist/components.min.js",
-		"dependencies/flux/dist/flux.min.js",
+		"bower_components/ho-promise/dist/promise.min.js",
+		"bower_components/ho-classloader/dist/classloader.min.js",
+		"bower_components/ho-watch/dist/watch.min.js",
+		"bower_components/ho-components/dist/components.min.js",
+		"bower_components/ho-flux/dist/flux.min.js",
 		"dist/ui.js"
 	]
 };
