@@ -92,15 +92,18 @@ module ho.ui {
 			}
 
 			components.forEach(c => {
-				ho.components.registry.mapping[c] = this.map + 'components/' + c + '/' + c + '.js';
+				//ho.components.registry.mapping[c] = this.map + 'components/' + c + '/' + c + '.js';
+				ho.classloader.mapping[c] = this.map + 'components/' + c + '/' + c + '.js';
 			});
 
 			attributes.forEach(a => {
-				ho.components.registry.mapping[a] = this.map + 'attributes/' + a + '/' + a + '.js';
+				//ho.components.registry.mapping[a] = this.map + 'attributes/' + a + '/' + a + '.js';
+				ho.classloader.mapping[a] = this.map + 'attributes/' + a + '/' + a + '.js';
 			});
 
 			stores.forEach(s => {
-				ho.flux.registry.mapping[s] = this.map + 'stores/' + s + '/' + s + '.js';
+				//ho.flux.registry.mapping[s] = this.map + 'stores/' + s + '/' + s + '.js';
+				ho.classloader.mapping[s] = this.map + 'stores/' + s + '/' + s + '.js';
 			});
 		}
 
