@@ -90,14 +90,14 @@ declare module ho.classloader {
     type clazz = Function;
     type PromiseOfClasses = ho.promise.Promise<clazz[], any>;
 }
+declare module ho.classloader.xhr {
+    function get(url: string): ho.promise.Promise<string, string>;
+}
 declare module ho.classloader.util {
     function expose(name: string, obj: any): void;
 }
 declare module ho.classloader.util {
     function get(path: string, obj?: any): any;
-}
-declare module ho.classloader.xhr {
-    function get(url: string): ho.promise.Promise<string, string>;
 }
 
 interface Window {
@@ -110,9 +110,6 @@ declare module ho.watch {
     function watch(obj: any, name: string, handler: Handler): void;
 }
 
-/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
-/// <reference path="bower_components/ho-classloader/dist/classloader.d.ts" />
-/// <reference path="bower_components/ho-watch/dist/watch.d.ts" />
 declare module ho.components {
     /**
         Baseclass for Attributes.
