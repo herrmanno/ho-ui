@@ -9,20 +9,6 @@ declare module ho.ui {
         process: () => ho.promise.Promise<any, any>;
     }
 }
-declare class Bind extends ho.components.WatchAttribute {
-    init(): void;
-    protected bindInput(): void;
-    protected bindSelect(): void;
-    protected bindTextarea(): void;
-    protected bindOther(): void;
-}
-declare class BindBi extends Bind {
-    protected bindInput(): void;
-    protected bindSelect(): void;
-    protected bindTextarea(): void;
-    protected bindOther(): void;
-    update(): void;
-}
 declare class Stored extends ho.components.Component {
     stores: Array<string>;
     init(): any;
@@ -40,4 +26,18 @@ declare class View extends ho.components.Component {
     protected loadDynamicRequirements(html: string): ho.promise.Promise<any, any>;
     protected loadDynamicComponents(html: string): ho.promise.Promise<string, string>;
     protected loadDynamicAttributes(html: string): ho.promise.Promise<string, string>;
+}
+declare class Bind extends ho.components.WatchAttribute {
+    init(): void;
+    protected bindInput(): void;
+    protected bindSelect(): void;
+    protected bindTextarea(): void;
+    protected bindOther(): void;
+}
+declare class BindBi extends Bind {
+    protected bindInput(): void;
+    protected bindSelect(): void;
+    protected bindTextarea(): void;
+    protected bindOther(): void;
+    update(): void;
 }
