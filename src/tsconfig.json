@@ -23,9 +23,9 @@
     "files": [
         "./attributes/bind/bind.ts",
         "./attributes/bindbi/bindbi.ts",
-        "./components/Fluxcomponent/FluxComponent.ts",
+        "./components/FluxComponent/FluxComponent.ts",
         "./components/View/view.ts",
-        "./typgins.d.ts",
-        "./ui.ts"
+        "./ho/ui/ui.ts",
+        "./typgins.d.ts"
     ]
 }

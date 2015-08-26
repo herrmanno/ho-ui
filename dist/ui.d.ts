@@ -1,14 +1,3 @@
-declare module ho.ui {
-    function run(options?: IOptions): ho.promise.Promise<any, any>;
-    interface IOptions {
-        root: string | typeof ho.components.Component;
-        router: string | typeof ho.flux.Router;
-        map: string | boolean;
-        dir: boolean;
-        min: boolean;
-        process: () => ho.promise.Promise<any, any>;
-    }
-}
 declare class Bind extends ho.components.WatchAttribute {
     init(): void;
     protected bindInput(): void;
@@ -23,13 +12,6 @@ declare class BindBi extends Bind {
     protected bindOther(): void;
     update(): void;
 }
-declare class FluxComponent extends ho.components.Component {
-    stores: Array<string>;
-    actions: Array<string>;
-    init(): ho.promise.Promise<any, any>;
-    protected initSotres(): ho.promise.Promise<any, any>;
-    protected initActions(): ho.promise.Promise<any, any>;
-}
 declare class View extends ho.components.Component {
     html: string;
     properties: {
@@ -43,4 +25,22 @@ declare class View extends ho.components.Component {
     protected loadDynamicRequirements(html: string): ho.promise.Promise<any, any>;
     protected loadDynamicComponents(html: string): ho.promise.Promise<string, string>;
     protected loadDynamicAttributes(html: string): ho.promise.Promise<string, string>;
+}
+declare module ho.ui {
+    function run(options?: IOptions): ho.promise.Promise<any, any>;
+    interface IOptions {
+        root: string | typeof ho.components.Component;
+        router: string | typeof ho.flux.Router;
+        map: string | boolean;
+        dir: boolean;
+        min: boolean;
+        process: () => ho.promise.Promise<any, any>;
+    }
+}
+declare class FluxComponent extends ho.components.Component {
+    stores: Array<string>;
+    actions: Array<string>;
+    init(): ho.promise.Promise<any, any>;
+    protected initSotres(): ho.promise.Promise<any, any>;
+    protected initActions(): ho.promise.Promise<any, any>;
 }
