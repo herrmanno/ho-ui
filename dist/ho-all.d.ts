@@ -428,6 +428,13 @@ declare class Bind extends ho.components.WatchAttribute {
     protected bindTextarea(): void;
     protected bindOther(): void;
 }
+declare class BindBi extends Bind {
+    protected bindInput(): void;
+    protected bindSelect(): void;
+    protected bindTextarea(): void;
+    protected bindOther(): void;
+    update(): void;
+}
 declare class FluxComponent extends ho.components.Component {
     stores: Array<string>;
     actions: Array<string>;
@@ -448,11 +455,4 @@ declare class View extends ho.components.Component {
     protected loadDynamicRequirements(html: string): ho.promise.Promise<any, any>;
     protected loadDynamicComponents(html: string): ho.promise.Promise<string, string>;
     protected loadDynamicAttributes(html: string): ho.promise.Promise<string, string>;
-}
-declare class BindBi extends Bind {
-    protected bindInput(): void;
-    protected bindSelect(): void;
-    protected bindTextarea(): void;
-    protected bindOther(): void;
-    update(): void;
 }

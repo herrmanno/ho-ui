@@ -4,8 +4,8 @@ module ho.ui {
 		options = new Options(options);
 
 		let p = options.process()
-		.then(ho.components.run)
-		.then(ho.flux.run);
+		.then(ho.components.run.bind(ho.components, undefined))
+		.then(ho.flux.run.bind(ho.flux, undefined));
 
 		return p;
 	}
