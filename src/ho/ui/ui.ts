@@ -18,6 +18,7 @@ module ho.ui {
 	let attributes = [
 		"Bind",
 		"BindBi",
+		"Disable"
 	];
 
 	let stores = [
