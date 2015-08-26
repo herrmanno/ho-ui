@@ -5,9 +5,7 @@ class FluxComponent extends ho.components.Component {
 	init() {
 		let p_super = ho.promise.Promise.create(super.init());
 
-		let p_stores = this.stores.map(s => {
-			return ho.flux.STORES.loadStore(s);
-		});
+		let p_stores = this.initStores();
 
 		let p_actions = this.initActions();
 
@@ -16,7 +14,7 @@ class FluxComponent extends ho.components.Component {
 		return ho.promise.Promise.all(promises);
 	}
 
-	protected initSotres(): ho.promise.Promise<any, any> {
+	protected initStores(): ho.promise.Promise<any, any> {
 		let self = this;
 		let promises = this.stores.map(sName => {
 			return ho.flux.STORES.loadStore(sName)
