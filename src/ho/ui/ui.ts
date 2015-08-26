@@ -56,28 +56,30 @@ module ho.ui {
 		}
 
 		protected processRoot() {
+			let self = this;
 			return new ho.promise.Promise((resolve, reject) => {
-				if(typeof this.root === 'string') {
-					ho.components.registry.instance.loadComponent(<string>this.root)
+				if(typeof self.root === 'string') {
+					ho.components.registry.instance.loadComponent(<string>self.root)
 					.then(resolve)
 					.catch(reject);
 
 				} else {
-					ho.components.registry.instance.register(<typeof ho.components.Component>this.root)
+					ho.components.registry.instance.register(<typeof ho.components.Component>self.root)
 					resolve(null);
 				}
 			});
 		}
 
 		protected processRouter(): ho.promise.Promise<any, any> {
+			let self = this;
 			return new ho.promise.Promise((resolve, reject) => {
-				if(typeof this.router === 'string') {
-					ho.flux.STORES.loadStore(<string>this.router, false)
+				if(typeof self.router === 'string') {
+					ho.flux.STORES.loadStore(<string>self.router, false)
 					.then(r => resolve(r))
 					.catch(reject);
 
 				} else {
-					resolve(new (<typeof ho.flux.Router>this.router)());
+					resolve(new (<typeof ho.flux.Router>self.router)());
 				}
 			})
 			.then((r: ho.flux.Router) => {

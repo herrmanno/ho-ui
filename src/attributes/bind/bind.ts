@@ -32,7 +32,7 @@ class Bind extends ho.components.WatchAttribute {
 
 	protected bindTextarea() {
 		this.element.onkeyup = e => {
-			this.eval(`${this.value} = '${(<HTMLInputElement>this.element).value}'`);
+			this.eval(`${this.value} = '${(<HTMLTextAreaElement>this.element).value}'`);
 		}
 	}
 

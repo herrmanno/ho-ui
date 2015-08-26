@@ -23,6 +23,7 @@
     "files": [
         "./attributes/bind/bind.ts",
         "./attributes/bindbi/bindbi.ts",
+        "./attributes/disable/disable.ts",
         "./components/FluxComponent/FluxComponent.ts",
         "./components/View/view.ts",
         "./ho/ui/ui.ts",
