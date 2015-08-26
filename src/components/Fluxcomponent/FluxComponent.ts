@@ -1,4 +1,4 @@
-class Stored extends ho.components.Component {
+class FluxComponent extends ho.components.Component {
 	public stores: Array<string> = [];
 	public actions: Array<string> = [];
 
