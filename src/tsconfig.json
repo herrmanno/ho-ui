@@ -23,7 +23,7 @@
     "files": [
         "./attributes/bind/bind.ts",
         "./attributes/bindbi/bindbi.ts",
-        "./components/Stored/Stored.ts",
+        "./components/Fluxcomponent/FluxComponent.ts",
         "./components/View/view.ts",
         "./typgins.d.ts",
         "./ui.ts"

@@ -25,7 +25,10 @@ declare class BindBi extends Bind {
 }
 declare class Stored extends ho.components.Component {
     stores: Array<string>;
-    init(): any;
+    actions: Array<string>;
+    init(): ho.promise.Promise<any, any>;
+    protected initSotres(): ho.promise.Promise<any, any>;
+    protected initActions(): ho.promise.Promise<any, any>;
 }
 declare class View extends ho.components.Component {
     html: string;

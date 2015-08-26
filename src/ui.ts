@@ -11,7 +11,7 @@ module ho.ui {
 	}
 
 	let components = [
-		"Stored",
+		"FluxComponent",
 		"View",
 	];
 
@@ -72,13 +72,17 @@ module ho.ui {
 		protected processRouter(): ho.promise.Promise<any, any> {
 			return new ho.promise.Promise((resolve, reject) => {
 				if(typeof this.router === 'string') {
-					ho.flux.STORES.loadStore(<string>this.router)
-					.then(resolve)
+					ho.flux.STORES.loadStore(<string>this.router, false)
+					.then(r => resolve(r))
 					.catch(reject);
 
 				} else {
 					resolve(new (<typeof ho.flux.Router>this.router)());
 				}
+			})
+			.then((r: ho.flux.Router) => {
+				ho.flux.Router = <typeof ho.flux.Router>r.constructor;
+				ho.flux.STORES.register(r);
 			});
 
 		}
@@ -108,7 +112,9 @@ module ho.ui {
 		}
 
 		protected processDir(): void {
-			ho.components.dir = this.dir;
+			ho.components.registry.useDir = this.dir;
+			ho.flux.registry.useDir = this.dir;
+			ho.flux.actions.useDir = this.dir;
 		}
 
 		protected processMin(): void {

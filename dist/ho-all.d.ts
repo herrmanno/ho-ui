@@ -21,7 +21,6 @@ declare module ho.promise {
     }
 }
 
-/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
 declare module ho.classloader {
     let mapping: {
         [key: string]: string;
@@ -31,7 +30,7 @@ declare module ho.classloader {
         private cache;
         constructor(c?: ILoaderConfig);
         config(c: ILoaderConfig): void;
-        load(arg: ILoadArguments): promise.Promise<Function[], any>;
+        load(arg: ILoadArguments): any;
         protected load_script(arg: ILoadArguments): PromiseOfClasses;
         protected load_function(arg: ILoadArguments): PromiseOfClasses;
         protected load_eval(arg: ILoadArguments): PromiseOfClasses;
@@ -59,12 +58,17 @@ declare module ho.classloader {
     }
 }
 declare module ho.classloader {
+    enum WarnLevel {
+        INFO = 0,
+        ERROR = 1,
+    }
     interface ILoaderConfig {
         loadType?: LoadType;
         urlTemplate?: string;
         useDir?: boolean;
         useMin?: boolean;
         cache?: boolean;
+        warnLevel?: WarnLevel;
     }
     class LoaderConfig implements ILoaderConfig {
         loadType: LoadType;
@@ -72,6 +76,7 @@ declare module ho.classloader {
         useDir: boolean;
         useMin: boolean;
         cache: boolean;
+        warnLevel: WarnLevel;
         constructor(c?: ILoaderConfig);
     }
 }
@@ -91,7 +96,7 @@ declare module ho.classloader {
     type PromiseOfClasses = ho.promise.Promise<clazz[], any>;
 }
 declare module ho.classloader.util {
-    function expose(name: string, obj: any): void;
+    function expose(name: string, obj: any, error?: boolean): void;
 }
 declare module ho.classloader.util {
     function get(path: string, obj?: any): any;
@@ -110,9 +115,6 @@ declare module ho.watch {
     function watch(obj: any, name: string, handler: Handler): void;
 }
 
-/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
-/// <reference path="bower_components/ho-classloader/dist/classloader.d.ts" />
-/// <reference path="bower_components/ho-watch/dist/watch.d.ts" />
 declare module ho.components {
     /**
         Baseclass for Attributes.
@@ -289,8 +291,9 @@ declare module ho.flux {
     import Promise = ho.promise.Promise;
     let DISPATCHER: Dispatcher;
     let STORES: registry.Registry;
+    let ACTIONS: actions.Registry;
     let dir: boolean;
-    function run(): Promise<any, any>;
+    function run(router?: any): Promise<any, any>;
 }
 declare module ho.flux {
     import Promise = ho.promise.Promise;
@@ -345,13 +348,36 @@ declare module ho.flux {
         protected data: T;
         private id;
         private handlers;
+        protected actions: string[];
         constructor();
-        init(): any;
+        init(): ho.promise.Promise<any, any>;
         name: string;
         register(callback: (data: T) => void, self?: any): string;
         protected on(type: string, func: Function): void;
         protected handle(action: IAction): void;
         protected changed(): void;
+    }
+}
+declare module ho.flux.actions {
+    class Action {
+        name: string;
+    }
+}
+declare module ho.flux.actions {
+    import Promise = ho.promise.Promise;
+    let mapping: {
+        [key: string]: string;
+    };
+    let useDir: boolean;
+    class Registry {
+        private actions;
+        private actionLoader;
+        register(action: Action): Action;
+        get(actionClass: string): Store<any>;
+        get<T extends Action>(actionClass: {
+            new (): T;
+        }): T;
+        loadAction(name: string): Promise<Action, string>;
     }
 }
 declare module ho.flux.registry {
@@ -368,7 +394,7 @@ declare module ho.flux.registry {
         get<T extends Store<any>>(storeClass: {
             new (): T;
         }): T;
-        loadStore(name: string): Promise<Store<any>, string>;
+        loadStore(name: string, init?: boolean): Promise<Store<any>, string>;
     }
 }
 declare module ho.flux.stateprovider {
@@ -408,7 +434,10 @@ declare class BindBi extends Bind {
 }
 declare class Stored extends ho.components.Component {
     stores: Array<string>;
-    init(): any;
+    actions: Array<string>;
+    init(): ho.promise.Promise<any, any>;
+    protected initSotres(): ho.promise.Promise<any, any>;
+    protected initActions(): ho.promise.Promise<any, any>;
 }
 declare class View extends ho.components.Component {
     html: string;
