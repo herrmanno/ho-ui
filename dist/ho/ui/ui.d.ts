@@ -5,6 +5,20 @@ declare class Bind extends ho.components.WatchAttribute {
     protected bindTextarea(): void;
     protected bindOther(): void;
 }
+declare class FluxComponent extends ho.components.Component {
+    stores: Array<string>;
+    actions: Array<string>;
+    init(): ho.promise.Promise<any, any>;
+    protected initStores(): ho.promise.Promise<any, any>;
+    protected initActions(): ho.promise.Promise<any, any>;
+}
+declare class BindBi extends Bind {
+    protected bindInput(): void;
+    protected bindSelect(): void;
+    protected bindTextarea(): void;
+    protected bindOther(): void;
+    update(): void;
+}
 declare module ho.ui {
     function run(options?: IOptions): ho.promise.Promise<any, any>;
     interface IOptions {
@@ -15,13 +29,6 @@ declare module ho.ui {
         min: boolean;
         process: () => ho.promise.Promise<any, any>;
     }
-}
-declare class FluxComponent extends ho.components.Component {
-    stores: Array<string>;
-    actions: Array<string>;
-    init(): ho.promise.Promise<any, any>;
-    protected initStores(): ho.promise.Promise<any, any>;
-    protected initActions(): ho.promise.Promise<any, any>;
 }
 declare class View extends ho.components.Component {
     html: string;
@@ -36,11 +43,4 @@ declare class View extends ho.components.Component {
     protected loadDynamicRequirements(html: string): ho.promise.Promise<any, any>;
     protected loadDynamicComponents(html: string): ho.promise.Promise<string, string>;
     protected loadDynamicAttributes(html: string): ho.promise.Promise<string, string>;
-}
-declare class BindBi extends Bind {
-    protected bindInput(): void;
-    protected bindSelect(): void;
-    protected bindTextarea(): void;
-    protected bindOther(): void;
-    update(): void;
 }
