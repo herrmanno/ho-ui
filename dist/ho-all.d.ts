@@ -115,6 +115,9 @@ declare module ho.watch {
     function watch(obj: any, name: string, handler: Handler): void;
 }
 
+/// <reference path="bower_components/ho-promise/dist/promise.d.ts" />
+/// <reference path="bower_components/ho-classloader/dist/classloader.d.ts" />
+/// <reference path="bower_components/ho-watch/dist/watch.d.ts" />
 declare module ho.components {
     /**
         Baseclass for Attributes.
