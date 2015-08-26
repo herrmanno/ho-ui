@@ -20,7 +20,7 @@ var modules = {
 		"bower_components/ho-watch/dist/watch.d.ts",
 		"bower_components/ho-components/dist/components.d.ts",
 		"bower_components/ho-flux/dist/flux.d.ts",
-		"dist/ui.d.ts"
+		"dist/ho/ui/ui.d.ts"
 	],
 	js: [
 		"bower_components/ho-promise/dist/promise.js",
@@ -28,7 +28,7 @@ var modules = {
 		"bower_components/ho-watch/dist/watch.js",
 		"bower_components/ho-components/dist/components.js",
 		"bower_components/ho-flux/dist/flux.js",
-		"dist/ui.js"
+		"dist/ho/ui/ui.js"
 	],
 	min: [
 		"bower_components/ho-promise/dist/promise.min.js",
@@ -36,7 +36,7 @@ var modules = {
 		"bower_components/ho-watch/dist/watch.min.js",
 		"bower_components/ho-components/dist/components.min.js",
 		"bower_components/ho-flux/dist/flux.min.js",
-		"dist/ui.min.js"
+		"dist/ho/ui/ui.min.js"
 	]
 };
 
@@ -78,7 +78,7 @@ gulp.task('def', ['mini'], function() {
 			out: 'ui.js',
 			declarationFiles: true
 		}));
-	return ts.dts.pipe(gulp.dest(dist));
+	return ts.dts.pipe(gulp.dest(dist+'/ho/ui'));
 });
 
 gulp.task('def-combine', ['def'], function() {
