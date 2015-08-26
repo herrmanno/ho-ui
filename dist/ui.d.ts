@@ -12,6 +12,13 @@ declare class BindBi extends Bind {
     protected bindOther(): void;
     update(): void;
 }
+declare class FluxComponent extends ho.components.Component {
+    stores: Array<string>;
+    actions: Array<string>;
+    init(): ho.promise.Promise<any, any>;
+    protected initSotres(): ho.promise.Promise<any, any>;
+    protected initActions(): ho.promise.Promise<any, any>;
+}
 declare class View extends ho.components.Component {
     html: string;
     properties: {
@@ -36,11 +43,4 @@ declare module ho.ui {
         min: boolean;
         process: () => ho.promise.Promise<any, any>;
     }
-}
-declare class FluxComponent extends ho.components.Component {
-    stores: Array<string>;
-    actions: Array<string>;
-    init(): ho.promise.Promise<any, any>;
-    protected initSotres(): ho.promise.Promise<any, any>;
-    protected initActions(): ho.promise.Promise<any, any>;
 }
