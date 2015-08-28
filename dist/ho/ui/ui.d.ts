@@ -43,6 +43,17 @@ declare class View extends ho.components.Component {
     protected loadDynamicComponents(html: string): ho.promise.Promise<string, string>;
     protected loadDynamicAttributes(html: string): ho.promise.Promise<string, string>;
 }
+declare module ho.ui {
+    function run(options?: IOptions): ho.promise.Promise<any, any>;
+    interface IOptions {
+        root: string | typeof ho.components.Component;
+        router: string | typeof ho.flux.Router;
+        map: string | boolean;
+        dir: boolean;
+        min: boolean;
+        process: () => ho.promise.Promise<any, any>;
+    }
+}
 import Promise = ho.promise.Promise;
 interface IState {
     name: string;
@@ -85,15 +96,4 @@ declare class Router extends ho.flux.Store<IRouterData> {
     private stateFromUrl(url);
     private urlFromState(url, args);
     private equals(o1, o2);
-}
-declare module ho.ui {
-    function run(options?: IOptions): ho.promise.Promise<any, any>;
-    interface IOptions {
-        root: string | typeof ho.components.Component;
-        router: string | typeof ho.flux.Router;
-        map: string | boolean;
-        dir: boolean;
-        min: boolean;
-        process: () => ho.promise.Promise<any, any>;
-    }
 }
