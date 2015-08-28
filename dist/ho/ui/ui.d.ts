@@ -1,13 +1,13 @@
-declare class RouterActions extends ho.flux.actions.Action {
-    go(state: string, data?: any): void;
-    go(data: IRouteData): void;
-}
 declare class Bind extends ho.components.WatchAttribute {
     init(): void;
     protected bindInput(): void;
     protected bindSelect(): void;
     protected bindTextarea(): void;
     protected bindOther(): void;
+}
+declare class RouterActions extends ho.flux.actions.Action {
+    go(state: string, data?: any): void;
+    go(data: IRouteData): void;
 }
 declare class Disable extends ho.components.WatchAttribute {
     update(): void;

@@ -21,7 +21,7 @@
         "!./node_modules/**/*"
     ],
     "files": [
-        "./actions/router.ts",
+        "./actions/actions/routeractions.ts",
         "./attributes/bind/bind.ts",
         "./attributes/bindbi/bindbi.ts",
         "./attributes/disable/disable.ts",
