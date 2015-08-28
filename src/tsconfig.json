@@ -28,7 +28,7 @@
         "./components/FluxComponent/FluxComponent.ts",
         "./components/View/view.ts",
         "./ho/ui/ui.ts",
-        "./stores/router.ts",
+        "./stores/router/router.ts",
         "./typgins.d.ts"
     ]
 }

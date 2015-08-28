@@ -45,7 +45,12 @@ class Router extends ho.flux.Store<IRouterData> {
 	}
 
 	public init(): ho.promise.Promise<any, any> {
-		return ho.promise.Promise.create(this.onHashChange());
+		let self = this;
+
+		return super.init()
+		.then(() => {
+			self.onHashChange();
+		});
 	}
 
 	@ho.flux.Store.on('STATE')
