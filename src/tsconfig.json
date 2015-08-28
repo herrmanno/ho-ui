@@ -21,12 +21,14 @@
         "!./node_modules/**/*"
     ],
     "files": [
+        "./actions/router.ts",
         "./attributes/bind/bind.ts",
         "./attributes/bindbi/bindbi.ts",
         "./attributes/disable/disable.ts",
         "./components/FluxComponent/FluxComponent.ts",
         "./components/View/view.ts",
         "./ho/ui/ui.ts",
+        "./stores/router.ts",
         "./typgins.d.ts"
     ]
 }

@@ -5,7 +5,10 @@ module ho.ui {
 
 		let p = options.process()
 		.then(ho.components.run.bind(ho.components, undefined))
-		.then(ho.flux.run.bind(ho.flux, undefined));
+		.then(()=> {
+			return ho.flux.STORES.get(ho.flux.Router).init();
+		})
+		//.then(ho.flux.run.bind(ho.flux, undefined));
 
 		return p;
 	}
@@ -22,7 +25,11 @@ module ho.ui {
 	];
 
 	let stores = [
+		"Router"
+	];
 
+	let actions = [
+		"RouterActions"
 	];
 
 	export interface IOptions {
@@ -99,18 +106,19 @@ module ho.ui {
 			}
 
 			components.forEach(c => {
-				//ho.components.registry.mapping[c] = this.map + 'components/' + c + '/' + c + '.js';
 				ho.classloader.mapping[c] = this.map + 'components/' + c + '/' + c + '.js';
 			});
 
 			attributes.forEach(a => {
-				//ho.components.registry.mapping[a] = this.map + 'attributes/' + a + '/' + a + '.js';
 				ho.classloader.mapping[a] = this.map + 'attributes/' + a + '/' + a + '.js';
 			});
 
 			stores.forEach(s => {
-				//ho.flux.registry.mapping[s] = this.map + 'stores/' + s + '/' + s + '.js';
 				ho.classloader.mapping[s] = this.map + 'stores/' + s + '/' + s + '.js';
+			});
+
+			actions.forEach(a => {
+				ho.classloader.mapping[a] = this.map + 'actions/' + a + '/' + a + '.js';
 			});
 		}
 
