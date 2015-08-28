@@ -53,7 +53,7 @@ class Router extends ho.flux.Store<IRouterData> {
 		});
 	}
 
-	@ho.flux.Store.on('STATE')
+	//@ho.flux.Store.on('STATE') ERRROR: Method gets bound with 'this=Router' but mapping gets defined in subclass
 	protected onStateChangeRequested(data: IRouteData): void {
 		//get requested state
 		let state = this.getStateFromName(data.state);
