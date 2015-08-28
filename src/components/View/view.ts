@@ -19,15 +19,25 @@ class View extends ho.components.Component {
 	}
 
 	protected state_changed(data: ho.flux.IRouterData): void {
-	    let html: string = null;
-		try {
-			html = data.state.view.filter((v) => {
-	      		return v.name === this.viewname;
-		    })[0].html;
-		} catch(e) {
-			html = null;
-		}
+		let state = this.getState(data);
+		if(!!state.component)
+			this.renderComponent(state.component);
+		else
+			this.renderHTML(state.html);
+	}
 
+	protected renderComponent(component: string) {
+		let registry = ho.components.registry.instance;
+
+		registry.loadComponent(component)
+		.then(function() {
+			this.html = false;
+			this.element.innerHTML = '<' + component + ' />';
+			this.render();
+		}.bind(this));
+	}
+
+	protected renderHTML(html: string): void {
 	    this.getHtml(html)
   		.then(function(h) {
 	      	html = h;
@@ -40,7 +50,15 @@ class View extends ho.components.Component {
 	    }.bind(this));
 	}
 
-		protected getHtml(html: string): ho.promise.Promise<string, string> {
+	protected getState(data: IRouterData): IViewState {
+		let view = data.state.view.filter((v) => {
+			return v.name === this.viewname;
+		})[0]
+
+		return view;
+	}
+
+	protected getHtml(html: string): ho.promise.Promise<string, string> {
 		if (typeof html === 'undefined')
 	      	return ho.promise.Promise.create(null);
 	    else if (html.slice(-5) !== '.html')
